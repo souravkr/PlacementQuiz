@@ -5,7 +5,8 @@
     <string name="c">C</string>
     <string name="dbms">DBMS</string>
     <string name="cn">CN</string>
+    <string name="opps">Opps!!</string>
+    <string name="GreatWork">Great work.</string>
+    <string name="congo">Congratulations !!</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

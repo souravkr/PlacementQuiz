@@ -2,15 +2,13 @@ package com.example.android.placementquiz
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.Navigation
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-
 import com.example.android.placementquiz.databinding.FragmentJavaQuestionsBinding
 
 
@@ -21,7 +19,7 @@ class JavaQuestionsFragment : Fragment() {
     val javaQuestionList : MutableList<javaQuestion> = mutableListOf<javaQuestion>(
         javaQuestion(
             "Who is called the father of java",
-            listOf<String>("Daniess Richi", "Benjen", "Daniess", "James Gosling")
+            listOf<String>("Daniess Richi", "Benjen", "Steve Goryi", "James Gosling")
         ),
 
         javaQuestion(
@@ -33,9 +31,8 @@ class JavaQuestionsFragment : Fragment() {
             "What is JVM",
             listOf<String>(   "Java Virtual Machine" ,
                 "Java VIP Machince",
-
                 "Java Virtual Maintance",
-                "D"
+                "Java Version Manupulation"
 
             )
         ),
@@ -63,7 +60,6 @@ class JavaQuestionsFragment : Fragment() {
                 "Use of pointers",
                 "Dynamic",
                 "Architecture Neutral",
-
                 "Object-oriented"
             )
         ),
@@ -73,7 +69,6 @@ class JavaQuestionsFragment : Fragment() {
                 "JDK",
                 "JVM",
                 "JRE",
-
                 "JDB"
             )
         ),
@@ -91,28 +86,37 @@ class JavaQuestionsFragment : Fragment() {
     lateinit var randomNumList : ArrayList<Int>
     lateinit var currentQuestion : javaQuestion
     lateinit var answers : MutableList<String>
-
+    val NUMERS_OF_QUESTION = 5
+    val QUESTION_IN_DATABASE = 7
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
 
         val binding : FragmentJavaQuestionsBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_java_questions ,container,false)
-        generateRandomArray()
         binding.game = this
+
+        //Generate a list of Unique Random numbers (Display those question only)
+        generateRandomArray()
+
         var currentQuestionNum :Int   = 0
+
+        //Set the first Question
         setQuestion(currentQuestionNum++)
-        var score:Int =0
+
+        var score: Int = 0
+
           binding.submitButton.setOnClickListener @Suppress("UNUSED_ANONYMOUS_PARAMETER")
        {
 
             view:View ->
 
+           //Get the ID of the checked Radio butoon and if nothing is checked update to -1
            val checkedID = binding.questionRadioGroup.checkedRadioButtonId
            var answerIndex :Int
 
+           //Convert ID value to index value
            when(checkedID){
                R.id.firstAnswerRadioButton -> answerIndex = 0
                R.id.secondAnswerRadioButton -> answerIndex = 1
@@ -122,45 +126,46 @@ class JavaQuestionsFragment : Fragment() {
 
            }
 
-           
+           //Check if atleast one of them are selected (if not display the toast to select one)
            if(answerIndex != -1) {
 
+               //Check if the option value matches the value to the value in one index which is the correct
+               // and if yes update the score
                if(currentQuestion.options[0] == answers[answerIndex]){
                    score++
                }
 
-               if (currentQuestionNum < 5) {
-                   //currentQuestion = assignQuestion[randomNumList[i]]
+               //Update the question and before that check if weather 5 of them are displayed
+               if (currentQuestionNum < NUMERS_OF_QUESTION) {
+                   //Clear the checked button
                    binding.questionRadioGroup.clearCheck()
                    setQuestion(currentQuestionNum++)
+
+                   //Invalidate all to reload the fragment to the new value
                    binding.invalidateAll()
 
                } else {
 
+                   //Navigate to the score Fragment with the score value
                    view.findNavController().navigate(JavaQuestionsFragmentDirections.actionJavaQuestionsFragmentToScoreFragment(score))
-                  /* Navigation.findNavController(view)*/
-                  /*     .navigate(R.id.action_javaQuestionsFragment_to_scoreFragment)*/
+
                }
 
                Log.i("score","$score")
 
-           }
-
-           else{
+           } else {
                Toast.makeText(context,"Select one of the options to Continue",Toast.LENGTH_LONG).show()
            }
 
         }
-
-
-
-
 
         return binding.root
     }
 
     private fun setQuestion(i:Int) {
         currentQuestion = javaQuestionList[randomNumList[i]]
+
+        //make a copy of the options in the answer value and then suffle it
         answers = currentQuestion.options.toMutableList()
         answers.shuffle()
         
@@ -170,18 +175,13 @@ class JavaQuestionsFragment : Fragment() {
         var hashSet : HashSet<Int> = HashSet<Int>()
         randomNumList = ArrayList<Int>()
 
-        while(randomNumList.size!= 5){
-        var curr = (0..7).random()
+        while (randomNumList.size != NUMERS_OF_QUESTION) {
+            var curr = (0 until javaQuestionList.size).random()
             if( hashSet.contains(curr)==false )  {
                 randomNumList.add(curr)
                 hashSet.add(curr)
             }
     }
-
-        for( a in randomNumList){
-                 Log.i("$a","I am goo")
-        }
-
     }
 
 

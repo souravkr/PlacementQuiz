@@ -1,15 +1,13 @@
 package com.example.android.placementquiz
 
+import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.Navigation
+import androidx.fragment.app.Fragment
 import com.example.android.placementquiz.databinding.FragmentScoreBinding
-import com.example.android.placementquiz.databinding.FragmentTitleBinding
 
 
 class ScoreFragment  : Fragment() {
@@ -24,15 +22,31 @@ class ScoreFragment  : Fragment() {
 
                 = DataBindingUtil.inflate(inflater , R.layout.fragment_score,container,false)
 
-        var args = arguments?.let { ScoreFragmentArgs.fromBundle(it) }
-        binding.names = this
+
+        var args = ScoreFragmentArgs.fromBundle(requireArguments())
+
+        var score = args.score
+
+        //Check the score and adust the messeage accordingly
+        when {
+            score <= 2 -> {
+                binding.textView2.setText(getString(R.string.opps))
+                binding.layout.setBackgroundColor(Color.RED)
+            }
+            score <= 4 -> {
+                binding.textView2.setText(getString(R.string.GreatWork))
+                binding.layout.setBackgroundColor(Color.YELLOW)
+            }
+            score == 5 -> {
+                binding.textView2.setText(getString(R.string.congo))
+                binding.layout.setBackgroundColor(Color.GREEN)
+            }
+
+        }
+
 
         var string : String ="You scored ${args?.score} out of 5"
         binding.scoreTextView.setText(string)
-
-        if (args != null) {
-            Log.i("same","${args.score}")
-        }
 
         return binding.root
 
