@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.example.android.placementquiz.databinding.FragmentScoreBinding
 
 
@@ -44,9 +46,14 @@ class ScoreFragment  : Fragment() {
 
         }
 
-
+        (activity as AppCompatActivity).supportActionBar?.title = (getString(R.string.javaScore))
         var string : String ="You scored ${args?.score} out of 5"
         binding.scoreTextView.setText(string)
+
+        binding.playAgainButton.setOnClickListener { view: View? ->
+
+            view?.findNavController()?.navigate(R.id.action_scoreFragment_to_titleFragment)
+        }
 
         return binding.root
 

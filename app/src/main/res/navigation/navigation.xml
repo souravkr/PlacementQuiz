@@ -28,5 +28,10 @@
         tools:layout="@layout/fragment_score" >
         <argument android:name="score"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_scoreFragment_to_titleFragment"
+            app:destination="@id/titleFragment"
+            app:popUpTo="@id/javaQuestionsFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
